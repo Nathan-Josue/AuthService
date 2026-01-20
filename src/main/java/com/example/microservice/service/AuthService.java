@@ -7,6 +7,7 @@ import com.example.microservice.DTOs.TokenResponse;
 import com.example.microservice.entity.RefreshToken;
 import com.example.microservice.entity.Role;
 import com.example.microservice.entity.User;
+import com.example.microservice.entity.UserStatus;
 import com.example.microservice.exception.EmailAlreadyExistsException;
 import com.example.microservice.exception.InvalidCredentialsException;
 import com.example.microservice.exception.ResourceNotFoundException;
@@ -56,9 +57,11 @@ public class AuthService {
 
         User user = User.builder()
             .email(request.getEmail())
-            .passwordHash(passwordEncoder.encode(request.getPassword()))
-            .firstName(request.getFirstName())
-            .lastName(request.getLastName())
+            .motDePasseHash(passwordEncoder.encode(request.getPassword()))
+            .nom(request.getLastName())
+            .prenom(request.getFirstName())
+            .telephone(request.getTelephone())
+            .statut(UserStatus.ACTIF)
             .enabled(true)
             .roles(Set.of(userRole))
             .build();
@@ -76,7 +79,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.email())
             .orElseThrow(() -> new InvalidCredentialsException("Email ou mot de passe incorrect"));
 
-        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+        if (!passwordEncoder.matches(request.password(), user.getMotDePasseHash())) {
             throw new InvalidCredentialsException("Email ou mot de passe incorrect");
         }
 
