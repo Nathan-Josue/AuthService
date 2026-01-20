@@ -30,3 +30,4 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
 
     boolean existsByTokenHashAndRevokedFalse(String tokenHash);
 }
+
